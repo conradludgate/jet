@@ -1,14 +1,15 @@
 package mysql
 
 import (
-	"github.com/go-jet/jet/v2/generator/mysql"
-	"github.com/go-jet/jet/v2/internal/testutils"
-	"github.com/go-jet/jet/v2/tests/dbconfig"
-	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"testing"
+
+	"github.com/go-jet/jet/v2/generator/mysql"
+	"github.com/go-jet/jet/v2/internal/testutils"
+	"github.com/go-jet/jet/v2/tests/dbconfig"
+	"github.com/stretchr/testify/require"
 )
 
 const genTestDirRoot = "./.gentestdata3"
@@ -151,8 +152,9 @@ type ActorTable struct {
 	LastName   mysql.ColumnString
 	LastUpdate mysql.ColumnTimestamp
 
-	AllColumns     mysql.ColumnList
-	MutableColumns mysql.ColumnList
+	AllColumns      mysql.ColumnList
+	MutableColumns  mysql.ColumnList
+	RequiredColumns mysql.ColumnList
 }
 
 // AS creates new ActorTable with assigned alias
@@ -170,6 +172,7 @@ func newActorTable() ActorTable {
 		LastUpdateColumn = mysql.TimestampColumn("last_update")
 		allColumns       = mysql.ColumnList{ActorIDColumn, FirstNameColumn, LastNameColumn, LastUpdateColumn}
 		mutableColumns   = mysql.ColumnList{FirstNameColumn, LastNameColumn, LastUpdateColumn}
+		requiredColumns  = mysql.ColumnList{ActorIDColumn, FirstNameColumn, LastNameColumn}
 	)
 
 	return ActorTable{
@@ -181,8 +184,9 @@ func newActorTable() ActorTable {
 		LastName:   LastNameColumn,
 		LastUpdate: LastUpdateColumn,
 
-		AllColumns:     allColumns,
-		MutableColumns: mutableColumns,
+		AllColumns:      allColumns,
+		MutableColumns:  mutableColumns,
+		RequiredColumns: requiredColumns,
 	}
 }
 `
@@ -234,8 +238,9 @@ type ActorInfoTable struct {
 	LastName  mysql.ColumnString
 	FilmInfo  mysql.ColumnString
 
-	AllColumns     mysql.ColumnList
-	MutableColumns mysql.ColumnList
+	AllColumns      mysql.ColumnList
+	MutableColumns  mysql.ColumnList
+	RequiredColumns mysql.ColumnList
 }
 
 // AS creates new ActorInfoTable with assigned alias
@@ -253,6 +258,7 @@ func newActorInfoTable() ActorInfoTable {
 		FilmInfoColumn  = mysql.StringColumn("film_info")
 		allColumns      = mysql.ColumnList{ActorIDColumn, FirstNameColumn, LastNameColumn, FilmInfoColumn}
 		mutableColumns  = mysql.ColumnList{ActorIDColumn, FirstNameColumn, LastNameColumn, FilmInfoColumn}
+		requiredColumns = mysql.ColumnList{ActorIDColumn, FirstNameColumn, LastNameColumn, FilmInfoColumn}
 	)
 
 	return ActorInfoTable{
@@ -264,8 +270,9 @@ func newActorInfoTable() ActorInfoTable {
 		LastName:  LastNameColumn,
 		FilmInfo:  FilmInfoColumn,
 
-		AllColumns:     allColumns,
-		MutableColumns: mutableColumns,
+		AllColumns:      allColumns,
+		MutableColumns:  mutableColumns,
+		RequiredColumns: requiredColumns,
 	}
 }
 `
