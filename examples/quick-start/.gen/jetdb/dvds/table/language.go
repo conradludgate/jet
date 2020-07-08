@@ -21,8 +21,9 @@ type languageTable struct {
 	Name       postgres.ColumnString
 	LastUpdate postgres.ColumnTimestamp
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
+	AllColumns      postgres.ColumnList
+	MutableColumns  postgres.ColumnList
+	RequiredColumns postgres.ColumnList
 }
 
 type LanguageTable struct {
@@ -52,6 +53,7 @@ func newLanguageTableImpl(schemaName, tableName string) languageTable {
 		LastUpdateColumn = postgres.TimestampColumn("last_update")
 		allColumns       = postgres.ColumnList{LanguageIDColumn, NameColumn, LastUpdateColumn}
 		mutableColumns   = postgres.ColumnList{NameColumn, LastUpdateColumn}
+		requiredColumns  = postgres.ColumnList{LanguageIDColumn, NameColumn}
 	)
 
 	return languageTable{
@@ -62,7 +64,8 @@ func newLanguageTableImpl(schemaName, tableName string) languageTable {
 		Name:       NameColumn,
 		LastUpdate: LastUpdateColumn,
 
-		AllColumns:     allColumns,
-		MutableColumns: mutableColumns,
+		AllColumns:      allColumns,
+		MutableColumns:  mutableColumns,
+		RequiredColumns: requiredColumns,
 	}
 }

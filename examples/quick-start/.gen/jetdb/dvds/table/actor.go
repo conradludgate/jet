@@ -22,8 +22,9 @@ type actorTable struct {
 	LastName   postgres.ColumnString
 	LastUpdate postgres.ColumnTimestamp
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
+	AllColumns      postgres.ColumnList
+	MutableColumns  postgres.ColumnList
+	RequiredColumns postgres.ColumnList
 }
 
 type ActorTable struct {
@@ -54,6 +55,7 @@ func newActorTableImpl(schemaName, tableName string) actorTable {
 		LastUpdateColumn = postgres.TimestampColumn("last_update")
 		allColumns       = postgres.ColumnList{ActorIDColumn, FirstNameColumn, LastNameColumn, LastUpdateColumn}
 		mutableColumns   = postgres.ColumnList{FirstNameColumn, LastNameColumn, LastUpdateColumn}
+		requiredColumns  = postgres.ColumnList{ActorIDColumn, FirstNameColumn, LastNameColumn}
 	)
 
 	return actorTable{
@@ -65,7 +67,8 @@ func newActorTableImpl(schemaName, tableName string) actorTable {
 		LastName:   LastNameColumn,
 		LastUpdate: LastUpdateColumn,
 
-		AllColumns:     allColumns,
-		MutableColumns: mutableColumns,
+		AllColumns:      allColumns,
+		MutableColumns:  mutableColumns,
+		RequiredColumns: requiredColumns,
 	}
 }

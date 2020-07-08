@@ -31,8 +31,9 @@ type filmTable struct {
 	SpecialFeatures postgres.ColumnString
 	Fulltext        postgres.ColumnString
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
+	AllColumns      postgres.ColumnList
+	MutableColumns  postgres.ColumnList
+	RequiredColumns postgres.ColumnList
 }
 
 type FilmTable struct {
@@ -72,6 +73,7 @@ func newFilmTableImpl(schemaName, tableName string) filmTable {
 		FulltextColumn        = postgres.StringColumn("fulltext")
 		allColumns            = postgres.ColumnList{FilmIDColumn, TitleColumn, DescriptionColumn, ReleaseYearColumn, LanguageIDColumn, RentalDurationColumn, RentalRateColumn, LengthColumn, ReplacementCostColumn, RatingColumn, LastUpdateColumn, SpecialFeaturesColumn, FulltextColumn}
 		mutableColumns        = postgres.ColumnList{TitleColumn, DescriptionColumn, ReleaseYearColumn, LanguageIDColumn, RentalDurationColumn, RentalRateColumn, LengthColumn, ReplacementCostColumn, RatingColumn, LastUpdateColumn, SpecialFeaturesColumn, FulltextColumn}
+		requiredColumns       = postgres.ColumnList{FilmIDColumn, TitleColumn, DescriptionColumn, ReleaseYearColumn, LanguageIDColumn, RentalDurationColumn, RentalRateColumn, LengthColumn, ReplacementCostColumn, RatingColumn, SpecialFeaturesColumn, FulltextColumn}
 	)
 
 	return filmTable{
@@ -92,7 +94,8 @@ func newFilmTableImpl(schemaName, tableName string) filmTable {
 		SpecialFeatures: SpecialFeaturesColumn,
 		Fulltext:        FulltextColumn,
 
-		AllColumns:     allColumns,
-		MutableColumns: mutableColumns,
+		AllColumns:      allColumns,
+		MutableColumns:  mutableColumns,
+		RequiredColumns: requiredColumns,
 	}
 }

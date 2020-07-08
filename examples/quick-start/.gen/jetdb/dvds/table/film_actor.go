@@ -21,8 +21,9 @@ type filmActorTable struct {
 	FilmID     postgres.ColumnInteger
 	LastUpdate postgres.ColumnTimestamp
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
+	AllColumns      postgres.ColumnList
+	MutableColumns  postgres.ColumnList
+	RequiredColumns postgres.ColumnList
 }
 
 type FilmActorTable struct {
@@ -52,6 +53,7 @@ func newFilmActorTableImpl(schemaName, tableName string) filmActorTable {
 		LastUpdateColumn = postgres.TimestampColumn("last_update")
 		allColumns       = postgres.ColumnList{ActorIDColumn, FilmIDColumn, LastUpdateColumn}
 		mutableColumns   = postgres.ColumnList{LastUpdateColumn}
+		requiredColumns  = postgres.ColumnList{ActorIDColumn, FilmIDColumn}
 	)
 
 	return filmActorTable{
@@ -62,7 +64,8 @@ func newFilmActorTableImpl(schemaName, tableName string) filmActorTable {
 		FilmID:     FilmIDColumn,
 		LastUpdate: LastUpdateColumn,
 
-		AllColumns:     allColumns,
-		MutableColumns: mutableColumns,
+		AllColumns:      allColumns,
+		MutableColumns:  mutableColumns,
+		RequiredColumns: requiredColumns,
 	}
 }

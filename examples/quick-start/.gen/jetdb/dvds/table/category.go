@@ -21,8 +21,9 @@ type categoryTable struct {
 	Name       postgres.ColumnString
 	LastUpdate postgres.ColumnTimestamp
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
+	AllColumns      postgres.ColumnList
+	MutableColumns  postgres.ColumnList
+	RequiredColumns postgres.ColumnList
 }
 
 type CategoryTable struct {
@@ -52,6 +53,7 @@ func newCategoryTableImpl(schemaName, tableName string) categoryTable {
 		LastUpdateColumn = postgres.TimestampColumn("last_update")
 		allColumns       = postgres.ColumnList{CategoryIDColumn, NameColumn, LastUpdateColumn}
 		mutableColumns   = postgres.ColumnList{NameColumn, LastUpdateColumn}
+		requiredColumns  = postgres.ColumnList{CategoryIDColumn, NameColumn}
 	)
 
 	return categoryTable{
@@ -62,7 +64,8 @@ func newCategoryTableImpl(schemaName, tableName string) categoryTable {
 		Name:       NameColumn,
 		LastUpdate: LastUpdateColumn,
 
-		AllColumns:     allColumns,
-		MutableColumns: mutableColumns,
+		AllColumns:      allColumns,
+		MutableColumns:  mutableColumns,
+		RequiredColumns: requiredColumns,
 	}
 }
