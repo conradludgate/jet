@@ -37,7 +37,7 @@ SELECT COLUMN_NAME,
 	IS_NULLABLE, IF(COLUMN_TYPE = 'tinyint(1)', 'boolean', DATA_TYPE), 
 	IF(DATA_TYPE = 'enum',  CONCAT(TABLE_NAME, '_', COLUMN_NAME), ''), 
 	COLUMN_TYPE LIKE '%unsigned%',
-	COLUMN_DEFAULT
+	COLUMN_DEFAULT IS NOT NULL
 FROM information_schema.columns 
 WHERE table_schema = ? and table_name = ?
 ORDER BY ordinal_position;

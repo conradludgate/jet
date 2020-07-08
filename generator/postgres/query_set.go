@@ -30,7 +30,7 @@ WHERE t.table_schema = $1 AND t.table_name = $2 AND t.constraint_type = 'PRIMARY
 
 func (p *postgresQuerySet) ListOfColumnsQuery() string {
 	return `
-SELECT column_name, is_nullable, data_type, udt_name, FALSE, column_default
+SELECT column_name, is_nullable, data_type, udt_name, FALSE, column_default IS NOT NULL
 FROM information_schema.columns
 where table_schema = $1 and table_name = $2
 order by ordinal_position;`

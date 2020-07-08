@@ -156,12 +156,12 @@ func getColumnsMetaData(db *sql.DB, querySet DialectQuerySet, schemaName, tableN
 	ret := []ColumnMetaData{}
 
 	for rows.Next() {
-		var name, isNullable, dataType, enumName, defaultValue string
-		var isUnsigned bool
-		err := rows.Scan(&name, &isNullable, &dataType, &enumName, &isUnsigned, &defaultValue)
+		var name, isNullable, dataType, enumName string
+		var isUnsigned, hasDefault bool
+		err := rows.Scan(&name, &isNullable, &dataType, &enumName, &isUnsigned, &hasDefault)
 		utils.PanicOnError(err)
 
-		ret = append(ret, NewColumnMetaData(name, isNullable == "YES", dataType, enumName, isUnsigned, defaultValue != ""))
+		ret = append(ret, NewColumnMetaData(name, isNullable == "YES", dataType, enumName, isUnsigned, hasDefault))
 	}
 
 	err = rows.Err()
