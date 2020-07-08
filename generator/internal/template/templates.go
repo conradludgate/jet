@@ -33,8 +33,9 @@ type {{.GoStructName}} struct {
 	{{ToGoIdentifier .Name}} {{dialect.PackageName}}.Column{{.SqlBuilderColumnType}}
 {{- end}}
 
-	AllColumns     {{dialect.PackageName}}.ColumnList
-	MutableColumns {{dialect.PackageName}}.ColumnList
+	AllColumns      {{dialect.PackageName}}.ColumnList
+	MutableColumns  {{dialect.PackageName}}.ColumnList
+	RequiredColumns {{dialect.PackageName}}.ColumnList
 }
 
 // AS creates new {{.GoStructName}} with assigned alias
@@ -49,8 +50,9 @@ func new{{.GoStructName}}() {{.GoStructName}} {
 	{{- range .Columns}}
 		{{ToGoIdentifier .Name}}Column = {{dialect.PackageName}}.{{.SqlBuilderColumnType}}Column("{{.Name}}")
 	{{- end}}
-		allColumns     = {{dialect.PackageName}}.ColumnList{ {{template "column-list" .Columns}} }
-		mutableColumns = {{dialect.PackageName}}.ColumnList{ {{template "column-list" .MutableColumns}} }
+		allColumns      = {{dialect.PackageName}}.ColumnList{ {{template "column-list" .Columns}} }
+		mutableColumns  = {{dialect.PackageName}}.ColumnList{ {{template "column-list" .MutableColumns}} }
+		requiredColumns = {{dialect.PackageName}}.ColumnList{ {{template "column-list" .RequiredColumns}} }
 	)
 
 	return {{.GoStructName}}{
@@ -61,8 +63,9 @@ func new{{.GoStructName}}() {{.GoStructName}} {
 		{{ToGoIdentifier .Name}}: {{ToGoIdentifier .Name}}Column,
 {{- end}}
 
-		AllColumns:     allColumns,
-		MutableColumns: mutableColumns,
+		AllColumns:      allColumns,
+		MutableColumns:  mutableColumns,
+		RequiredColumns: requiredColumns,
 	}
 }
 `
@@ -90,8 +93,9 @@ type {{.GoStructImplName}} struct {
 	{{ToGoIdentifier .Name}} {{dialect.PackageName}}.Column{{.SqlBuilderColumnType}}
 {{- end}}
 
-	AllColumns     {{dialect.PackageName}}.ColumnList
-	MutableColumns {{dialect.PackageName}}.ColumnList
+	AllColumns      {{dialect.PackageName}}.ColumnList
+	MutableColumns  {{dialect.PackageName}}.ColumnList
+	RequiredColumns {{dialect.PackageName}}.ColumnList
 }
 
 type {{.GoStructName}} struct {
@@ -119,8 +123,9 @@ func new{{.GoStructName}}Impl(schemaName, tableName string) {{.GoStructImplName}
 	{{- range .Columns}}
 		{{ToGoIdentifier .Name}}Column = {{dialect.PackageName}}.{{.SqlBuilderColumnType}}Column("{{.Name}}")
 	{{- end}}
-		allColumns     = {{dialect.PackageName}}.ColumnList{ {{template "column-list" .Columns}} }
-		mutableColumns = {{dialect.PackageName}}.ColumnList{ {{template "column-list" .MutableColumns}} }
+		allColumns      = {{dialect.PackageName}}.ColumnList{ {{template "column-list" .Columns}} }
+		mutableColumns  = {{dialect.PackageName}}.ColumnList{ {{template "column-list" .MutableColumns}} }
+		requiredColumns = {{dialect.PackageName}}.ColumnList{ {{template "column-list" .RequiredColumns}} }
 	)
 
 	return {{.GoStructImplName}}{
@@ -131,8 +136,9 @@ func new{{.GoStructName}}Impl(schemaName, tableName string) {{.GoStructImplName}
 		{{ToGoIdentifier .Name}}: {{ToGoIdentifier .Name}}Column,
 {{- end}}
 
-		AllColumns:     allColumns,
-		MutableColumns: mutableColumns,
+		AllColumns:      allColumns,
+		MutableColumns:  mutableColumns,
+		RequiredColumns: requiredColumns,
 	}
 }
 `

@@ -3,8 +3,9 @@ package metadata
 import (
 	"database/sql"
 	"fmt"
-	"github.com/go-jet/jet/v2/internal/utils"
 	"strings"
+
+	"github.com/go-jet/jet/v2/internal/utils"
 )
 
 // ColumnMetaData struct
@@ -14,6 +15,7 @@ type ColumnMetaData struct {
 	DataType   string
 	EnumName   string
 	IsUnsigned bool
+	HasDefault bool
 
 	SqlBuilderColumnType string
 	GoBaseType           string
@@ -21,13 +23,14 @@ type ColumnMetaData struct {
 }
 
 // NewColumnMetaData create new column meta data that describes one column in SQL database
-func NewColumnMetaData(name string, isNullable bool, dataType string, enumName string, isUnsigned bool) ColumnMetaData {
+func NewColumnMetaData(name string, isNullable bool, dataType string, enumName string, isUnsigned bool, hasDefault bool) ColumnMetaData {
 	columnMetaData := ColumnMetaData{
 		Name:       name,
 		IsNullable: isNullable,
 		DataType:   dataType,
 		EnumName:   enumName,
 		IsUnsigned: isUnsigned,
+		HasDefault: hasDefault,
 	}
 
 	columnMetaData.SqlBuilderColumnType = columnMetaData.getSqlBuilderColumnType()
@@ -153,12 +156,12 @@ func getColumnsMetaData(db *sql.DB, querySet DialectQuerySet, schemaName, tableN
 	ret := []ColumnMetaData{}
 
 	for rows.Next() {
-		var name, isNullable, dataType, enumName string
+		var name, isNullable, dataType, enumName, defaultValue string
 		var isUnsigned bool
-		err := rows.Scan(&name, &isNullable, &dataType, &enumName, &isUnsigned)
+		err := rows.Scan(&name, &isNullable, &dataType, &enumName, &isUnsigned, &defaultValue)
 		utils.PanicOnError(err)
 
-		ret = append(ret, NewColumnMetaData(name, isNullable == "YES", dataType, enumName, isUnsigned))
+		ret = append(ret, NewColumnMetaData(name, isNullable == "YES", dataType, enumName, isUnsigned, defaultValue != ""))
 	}
 
 	err = rows.Err()

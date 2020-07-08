@@ -2,9 +2,10 @@ package mysql
 
 import (
 	"database/sql"
+	"strings"
+
 	"github.com/go-jet/jet/v2/generator/internal/metadata"
 	"github.com/go-jet/jet/v2/internal/utils"
-	"strings"
 )
 
 // mySqlQuerySet is dialect query set for MySQL
@@ -35,7 +36,8 @@ func (m *mySqlQuerySet) ListOfColumnsQuery() string {
 SELECT COLUMN_NAME, 
 	IS_NULLABLE, IF(COLUMN_TYPE = 'tinyint(1)', 'boolean', DATA_TYPE), 
 	IF(DATA_TYPE = 'enum',  CONCAT(TABLE_NAME, '_', COLUMN_NAME), ''), 
-	COLUMN_TYPE LIKE '%unsigned%'
+	COLUMN_TYPE LIKE '%unsigned%',
+	COLUMN_DEFAULT
 FROM information_schema.columns 
 WHERE table_schema = ? and table_name = ?
 ORDER BY ordinal_position;

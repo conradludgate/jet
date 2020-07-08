@@ -2,8 +2,9 @@ package metadata
 
 import (
 	"database/sql"
-	"github.com/go-jet/jet/v2/internal/utils"
 	"strings"
+
+	"github.com/go-jet/jet/v2/internal/utils"
 )
 
 // TableMetaData metadata struct
@@ -30,6 +31,21 @@ func (t TableMetaData) MutableColumns() []ColumnMetaData {
 
 	for _, column := range t.Columns {
 		if t.IsPrimaryKey(column.Name) {
+			continue
+		}
+
+		ret = append(ret, column)
+	}
+
+	return ret
+}
+
+// RequiredColumns returns list of non default columns for table
+func (t TableMetaData) RequiredColumns() []ColumnMetaData {
+	ret := []ColumnMetaData{}
+
+	for _, column := range t.Columns {
+		if column.HasDefault {
 			continue
 		}
 
